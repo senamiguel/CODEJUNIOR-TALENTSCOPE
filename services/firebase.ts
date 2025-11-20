@@ -9,7 +9,10 @@ const messagingSenderId = import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID as s
 const appId = import.meta.env.VITE_FIREBASE_APP_ID as string | undefined;
 const measurementId = import.meta.env.VITE_FIREBASE_MEASUREMENT_ID as string | undefined;
 
+// Consider config valid only when both apiKey and projectId are present and not placeholder/undefined
 const isKeyValid = !!apiKey && apiKey !== "YOUR_API_KEY" && !apiKey.includes("undefined");
+const isProjectIdValid = !!projectId && projectId !== "YOUR_PROJECT_ID" && !projectId.includes("undefined");
+const isConfigValidComputed = isKeyValid && isProjectIdValid;
 
 const firebaseConfig = {
   apiKey,
@@ -21,7 +24,7 @@ const firebaseConfig = {
   measurementId
 };
 
-export const isConfigValid = isKeyValid;
+export const isConfigValid = isConfigValidComputed;
 
 let app;
 let auth: Auth | null = null;
@@ -34,14 +37,14 @@ if (isConfigValid) {
     auth = getAuth(app);
     db = getFirestore(app);
     googleProvider = new GoogleAuthProvider();
-    console.log("Firebase initialized successfully");
+    console.log("Firebase initialized successfully", { projectId, apiKey: apiKey?.slice?.(0,8) + '...' });
   } catch (error) {
     console.error("Firebase initialization error:", error);
     auth = null;
     db = null;
   }
 } else {
-  console.warn("Firebase keys missing or invalid. Running in Demo/Local Mode.");
+  console.warn("Firebase keys missing or invalid (projectId or apiKey). Running in Demo/Local Mode.", { projectId, apiKey });
 }
 
 export { auth, db, googleProvider };
