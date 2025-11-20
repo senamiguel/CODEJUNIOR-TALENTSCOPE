@@ -41,9 +41,6 @@ Requisitos: Node.js (versão compatível com o projeto), npm.
 - Para OCR/extração de texto de PDFs, é recomendado adicionar `pdfjs-dist` para incluir texto nos heurísticos antes de enviar ao modelo.
 - Não comite chaves em repositórios públicos. `.env.local` deve estar no `.gitignore`.
 
-## Branch de demonstração
-
-Existe um branch local chamado `evolution` com uma sequência de commits descritivos que ilustram a evolução do projeto para fins de demonstração. Esse branch foi criado localmente e não foi enviado a nenhum remoto.
 
 ## Testes e verificação
 
@@ -53,11 +50,3 @@ Existe um branch local chamado `evolution` com uma sequência de commits descrit
 
 - Para validação rápida de lint/testes (se existirem), execute os scripts correspondentes no `package.json`.
 
-## Ajuda / Próximos passos
-
-- Posso adicionar extração de texto para PDFs, exibir o `classificationReason` na UI para auditoria ou preparar um branch demo com commits contendo subsets reais de mudanças (em vez de commits vazios).
-- Se quiser que eu faça algum desses passos, diga qual e eu implemento.
-
----
-
-Arquivo gerado/atualizado automaticamente pelo script de suporte do projeto.
