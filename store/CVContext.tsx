@@ -28,11 +28,8 @@ export const CVProvider: FC<{ children: ReactNode }> = ({ children }) => {
     errors: []
   });
   const { currentUser } = useAuth();
+
   useEffect(() => {
-    if (!currentUser) {
-      setCandidates([]);
-      return;
-    }
     if (isConfigValid && db) {
       const q = query(collection(db, "candidates"), orderBy("name"));
       const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -47,8 +44,11 @@ export const CVProvider: FC<{ children: ReactNode }> = ({ children }) => {
       });
 
       return () => unsubscribe();
+    } else {
+      // If Firestore isn't configured, keep local candidates empty
+      setCandidates([]);
     }
-  }, [currentUser]);
+  }, [isConfigValid, db, currentUser]);
 
   // --- Data sanitation / normalization ---
   function sanitizeCandidate(raw: any): Candidate {
