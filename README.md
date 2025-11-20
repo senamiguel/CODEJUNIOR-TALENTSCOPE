@@ -10,6 +10,7 @@ Este repositório é a interface e o serviço de apoio para um sistema interno d
 
 Principais pontos:
 - Upload de CVs (DOCX, TXT, PDF).
+- **Detecção automática de currículos duplicados** (por email ou nome+curso).
 - Extração de texto (DOCX via mammoth). Para PDFs é recomendado extrair texto (podemos adicionar pdfjs-dist) para melhores heurísticas.
 - Análise de currículo via Google GenAI (Gemini).
 - Classificação conservadora de nível de experiência: por padrão um perfil sem evidência explícita de experiência profissional será classificado como `Trainee`. `Junior` só quando houver indicação de estágio/freelance; `Pleno`/`Senior` apenas quando houver indicação explícita de anos de experiência.
@@ -51,4 +52,8 @@ Requisitos: Node.js (versão compatível com o projeto), npm.
   npx tsc --noEmit
 
 - Para validação rápida de lint/testes (se existirem), execute os scripts correspondentes no `package.json`.
+
+## Detecção de Duplicatas
+
+O sistema possui proteção automática contra currículos duplicados. Para mais detalhes sobre como funciona, consulte a [documentação completa de detecção de duplicatas](./docs/DUPLICATE_DETECTION.md).
 

@@ -2,7 +2,8 @@ export interface Candidate {
   id: string;
   name: string;
   course: string;
-  currentPeriod: number; // e.g., 4th semester
+  // currentPeriod can be missing for malformed data; treat as optional
+  currentPeriod?: number; // e.g., 4th semester
   skills: string[]; // Hard skills
   softSkills: string[];
   experienceLevel: 'Junior' | 'Pleno' | 'Senior' | 'Trainee';
@@ -12,6 +13,10 @@ export interface Candidate {
   phone?: string;
   originalFileName: string;
   fileUrl?: string;
+  // Optional flags added by the app when sanitizing/normalizing imported or DB data
+  sanitizedFlags?: string[];
+  // Optional single-sentence explanation why the experienceLevel/classification was chosen
+  reasoning?: string;
 }
 
 export interface ProcessingStatus {

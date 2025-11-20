@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useCV } from '../store/CVContext';
 import { queryAgent } from '../services/geminiService';
-import { Send, Bot, User, Sparkles } from 'lucide-react';
+import { Send, User, Sparkles } from 'lucide-react';
 import { ChatMessage } from '../types';
 import { LoadingSpinner } from './LoadingSpinner';
 import ReactMarkdown from 'react-markdown';
@@ -13,7 +13,7 @@ export const AgentChat = () => {
     {
       id: 'intro',
       role: 'model',
-      text: 'Olá! Sou o seu Headhunter IA. Descreva o projeto ou a vaga e eu encontrarei os melhores membros da EJ para você.',
+      text: 'Olá! Sou o Agente de Talentos da Code []. Descreva o projeto ou a vaga e eu encontrarei os melhores membros da nossa amada EJ para você.',
       timestamp: Date.now()
     }
   ]);
@@ -72,15 +72,14 @@ export const AgentChat = () => {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] glass-panel rounded-xl overflow-hidden">
+    <div className="flex flex-col h-full glass-panel rounded-xl overflow-hidden">
       {/* Header */}
       <div className="p-4 border-b border-brand-border bg-black/20 flex items-center gap-3">
         <div className="w-10 h-10 rounded-full bg-gradient-to-r from-brand-purple to-brand-secondary flex items-center justify-center">
           <Sparkles className="text-white" size={20} />
         </div>
         <div>
-          <h3 className="text-white font-bold">Talent Agent</h3>
-          <p className="text-xs text-slate-400">Powered by Gemini 2.5 Flash</p>
+          <h3 className="text-white font-bold">Agente de Talentos</h3>
         </div>
       </div>
 
@@ -88,10 +87,14 @@ export const AgentChat = () => {
       <div className="flex-1 overflow-y-auto p-6 space-y-6">
         {messages.map(msg => (
           <div key={msg.id} className={`flex gap-4 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-            <div className={`w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center ${
-              msg.role === 'user' ? 'bg-slate-700' : 'bg-brand-accent/20 text-brand-accent'
+            <div className={`w-13 h-13 rounded-full flex-shrink-0 flex items-center justify-center overflow-hidden ${
+              msg.role === 'user' ? 'bg-slate-700' : 'bg-brand-accent/20'
             }`}>
-              {msg.role === 'user' ? <User size={16} /> : <Bot size={16} />}
+              {msg.role === 'user' ? (
+                <User size={20} />
+              ) : (
+                <img src="/images/codey.png" alt="Codey" className="w-full h-full rounded-full object-cover transform scale-110" />
+              )}
             </div>
             
             <div className={`max-w-[80%] p-4 rounded-2xl ${
@@ -130,8 +133,8 @@ export const AgentChat = () => {
         ))}
         {isLoading && (
           <div className="flex gap-4">
-            <div className="w-8 h-8 rounded-full bg-brand-accent/20 text-brand-accent flex items-center justify-center">
-              <Bot size={16} />
+            <div className="w-10 h-10 rounded-full bg-brand-accent/20 flex items-center justify-center overflow-hidden">
+              <img src="/images/codey.png" alt="Codey" className="w-full h-full rounded-full object-cover transform scale-110" />
             </div>
             <div className="bg-slate-800/50 p-4 rounded-2xl border border-slate-700">
               <LoadingSpinner />

@@ -1,12 +1,22 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { auth, googleProvider, isConfigValid } from '../services/firebase';
-import { signInWithPopup, signOut, onAuthStateChanged, User } from 'firebase/auth';
+import { auth, isConfigValid } from '../services/firebase';
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+  User,
+  sendPasswordResetEmail,
+  updateProfile
+} from 'firebase/auth';
 
 interface AuthContextType {
   currentUser: User | null;
   loading: boolean;
-  loginWithGoogle: () => Promise<void>;
+  login: (email: string, password: string) => Promise<void>;
+  register: (email: string, password: string, displayName: string) => Promise<void>;
   logout: () => Promise<void>;
+  resetPassword: (email: string) => Promise<void>;
   isDemoMode: boolean;
 }
 
@@ -29,16 +39,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setCurrentUser(JSON.parse(localUser));
       }
       setLoading(false);
-      return () => {};
+      return () => { };
     }
   }, []);
 
-  const loginWithGoogle = async () => {
-    if (!isConfigValid || !auth || !googleProvider) {
+  const login = async (email: string, password: string) => {
+    if (!isConfigValid || !auth) {
+      // Demo mode login
       const mockUser = {
-        uid: 'demo-user-123',
-        displayName: 'Admin (Demo)',
-        email: 'admin@code.je',
+        uid: 'demo-user-' + Date.now(),
+        displayName: email.split('@')[0],
+        email: email,
         photoURL: null,
         emailVerified: true,
         isAnonymous: false,
@@ -46,10 +57,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         providerData: [],
         refreshToken: '',
         tenantId: null,
-        delete: async () => {},
+        delete: async () => { },
         getIdToken: async () => 'mock-token',
         getIdTokenResult: async () => ({} as any),
-        reload: async () => {},
+        reload: async () => { },
         toJSON: () => ({}),
         phoneNumber: null
       } as unknown as User;
@@ -60,9 +71,61 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     try {
-      await signInWithPopup(auth, googleProvider);
+      await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
-      console.error("Error logging in with Google", error);
+      console.error("Error logging in", error);
+      throw error;
+    }
+  };
+
+  const register = async (email: string, password: string, displayName: string) => {
+    if (!isConfigValid || !auth) {
+      // Demo mode register
+      const mockUser = {
+        uid: 'demo-user-' + Date.now(),
+        displayName: displayName,
+        email: email,
+        photoURL: null,
+        emailVerified: true,
+        isAnonymous: false,
+        metadata: {},
+        providerData: [],
+        refreshToken: '',
+        tenantId: null,
+        delete: async () => { },
+        getIdToken: async () => 'mock-token',
+        getIdTokenResult: async () => ({} as any),
+        reload: async () => { },
+        toJSON: () => ({}),
+        phoneNumber: null
+      } as unknown as User;
+
+      setCurrentUser(mockUser);
+      localStorage.setItem('demo_user', JSON.stringify(mockUser));
+      return;
+    }
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      if (userCredential.user && displayName) {
+        await updateProfile(userCredential.user, { displayName });
+      }
+    } catch (error) {
+      console.error("Error registering", error);
+      throw error;
+    }
+  };
+
+  const resetPassword = async (email: string) => {
+    if (!isConfigValid || !auth) {
+      console.log("Demo mode: Password reset email would be sent to", email);
+      return;
+    }
+
+    try {
+      await sendPasswordResetEmail(auth, email);
+    } catch (error) {
+      console.error("Error sending password reset email", error);
       throw error;
     }
   };
@@ -82,7 +145,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ currentUser, loading, loginWithGoogle, logout, isDemoMode: !isConfigValid }}>
+    <AuthContext.Provider value={{ currentUser, loading, login, register, logout, resetPassword, isDemoMode: !isConfigValid }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,4 +1,4 @@
-import { LayoutDashboard, Users, MessageSquareText, UploadCloud, LogOut } from 'lucide-react';
+import { LayoutDashboard, Users, MessageSquareText, UploadCloud, LogOut, X } from 'lucide-react';
 import { useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -16,27 +16,48 @@ const NavItem = ({ to, icon: Icon, label, active }: { to: string; icon: any; lab
   </Link>
 );
 
-export const Sidebar = () => {
+type SidebarProps = {
+  isMobile?: boolean;
+  onClose?: () => void;
+};
+
+export const Sidebar = ({ isMobile = false, onClose }: SidebarProps) => {
   const location = useLocation();
   const { currentUser, logout } = useAuth();
   
+  // root classes: hide on small screens unless rendered as mobile drawer
+  const rootClass = isMobile
+    ? 'fixed inset-y-0 left-0 z-40 w-64 bg-[#09090A] border-r border-brand-border p-6 overflow-y-auto'
+    : 'hidden md:flex w-64 h-screen bg-[#09090A] border-r border-brand-border flex-col fixed left-0 top-0 z-20';
+
   return (
-    <aside className="w-64 h-screen bg-[#09090A] border-r border-brand-border flex flex-col fixed left-0 top-0 z-20">
-      <div className="p-8 pb-4">
-         {/* CODE [] Logo - Sidebar Version */}
-         <div className="font-black tracking-tighter text-3xl flex items-center gap-1 select-none cursor-default">
+    <aside className={rootClass}>
+      {isMobile && (
+        <div className="flex items-center justify-between mb-4">
+          <div className="font-black tracking-tighter text-2xl flex items-center gap-1 select-none cursor-default">
             <span className="text-brand-purple text-glow">CODE</span>
             <span className="text-brand-accent text-glow-green">[ ]</span>
           </div>
-          <p className="text-[10px] text-brand-gray uppercase tracking-widest mt-1 pl-1 font-mono">
-            Talent Scout
-          </p>
-      </div>
+          <button onClick={onClose} className="p-2 rounded hover:bg-slate-800">
+            <X size={18} />
+          </button>
+        </div>
+      )}
 
-      <nav className="flex-1 px-4 space-y-2 mt-6">
-        <NavItem to="/" icon={LayoutDashboard} label="Dashboard" active={location.pathname === '/'} />
+      {!isMobile && (
+        <div className="p-8 pb-4">
+          <div className="font-black tracking-tighter text-3xl flex items-center gap-1 select-none cursor-default">
+            <span className="text-brand-purple text-glow">CODE</span>
+            <span className="text-brand-accent text-glow-green">[ ]</span>
+          </div>
+          <p className="text-[10px] text-brand-gray uppercase tracking-widest mt-1 pl-1 font-mono">Talent Scout</p>
+        </div>
+      )}
+
+      <nav className="flex-1 px-2 space-y-2 mt-2">
+        <NavItem to="/" icon={LayoutDashboard} label="Visão Geral" active={location.pathname === '/'} />
         <NavItem to="/members" icon={Users} label="Membros" active={location.pathname === '/members'} />
-        <NavItem to="/agent" icon={MessageSquareText} label="IA Headhunter" active={location.pathname === '/agent'} />
+        <NavItem to="/agent" icon={MessageSquareText} label="Agente de Talentos" active={location.pathname === '/agent'} />
         <NavItem to="/upload" icon={UploadCloud} label="Importar CVs" active={location.pathname === '/upload'} />
       </nav>
 
