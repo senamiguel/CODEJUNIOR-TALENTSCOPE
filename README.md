@@ -2,19 +2,62 @@
 <img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
 </div>
 
-# Run and deploy your AI Studio app
+# TalentScout — Junior Enterprise Member Finder
 
-This contains everything you need to run your app locally.
+Este repositório é a interface e o serviço de apoio para um sistema interno de uma Junior Enterprise que facilita o upload, análise e busca por currículos (CVs). Ele combina um front-end em React + Vite com serviços de parsing e um cliente para APIs generativas (Gemini) e Firebase.
 
-View your app in AI Studio: https://ai.studio/apps/drive/11AqC-0H0uObWwmhVzdvq-3uIVqFif1dL
+Principais pontos:
+- Upload de CVs (DOCX, TXT, PDF).
+- Extração de texto (DOCX via mammoth). Para PDFs é recomendado extrair texto (podemos adicionar pdfjs-dist) para melhores heurísticas.
+- Análise de currículo via Google GenAI (Gemini).
+- Classificação conservadora de nível de experiência: por padrão um perfil sem evidência explícita de experiência profissional será classificado como `Trainee`. `Junior` só quando houver indicação de estágio/freelance; `Pleno`/`Senior` apenas quando houver indicação explícita de anos de experiência.
 
-## Run Locally
+## Executando localmente
 
-**Prerequisites:**  Node.js
+Requisitos: Node.js (versão compatível com o projeto), npm.
 
+1. Instale dependências:
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+   npm install
+
+2. Crie/edite `.env.local` (não comitar) e defina as variáveis necessárias com o prefixo `VITE_` para que o Vite as exponha ao cliente. Exemplo:
+
+   VITE_GEMINI_API_KEY=your_gemini_api_key_here
+   VITE_FIREBASE_API_KEY=your_firebase_api_key_here
+   VITE_FIREBASE_AUTH_DOMAIN=...
+   VITE_FIREBASE_PROJECT_ID=...
+
+   Nota: variáveis sem `VITE_` não estarão disponíveis no bundle do cliente.
+
+3. Rode o servidor de desenvolvimento:
+
+   npm run dev
+
+4. Abra http://localhost:5173 (ou a porta indicada pelo Vite).
+
+## Comportamento relevante e observações
+
+- O serviço de parsing usa o cliente GenAI e aplica heurísticas determinísticas adicionais para reduzir classificações incorretas (por exemplo, evitar marcar perfis sem experiência como `Junior` ou `Senior`).
+- Para OCR/extração de texto de PDFs, é recomendado adicionar `pdfjs-dist` para incluir texto nos heurísticos antes de enviar ao modelo.
+- Não comite chaves em repositórios públicos. `.env.local` deve estar no `.gitignore`.
+
+## Branch de demonstração
+
+Existe um branch local chamado `evolution` com uma sequência de commits descritivos que ilustram a evolução do projeto para fins de demonstração. Esse branch foi criado localmente e não foi enviado a nenhum remoto.
+
+## Testes e verificação
+
+- O projeto é escrito em TypeScript. Para checar tipos localmente rode:
+
+  npx tsc --noEmit
+
+- Para validação rápida de lint/testes (se existirem), execute os scripts correspondentes no `package.json`.
+
+## Ajuda / Próximos passos
+
+- Posso adicionar extração de texto para PDFs, exibir o `classificationReason` na UI para auditoria ou preparar um branch demo com commits contendo subsets reais de mudanças (em vez de commits vazios).
+- Se quiser que eu faça algum desses passos, diga qual e eu implemento.
+
+---
+
+Arquivo gerado/atualizado automaticamente pelo script de suporte do projeto.
