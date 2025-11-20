@@ -2,7 +2,7 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { Candidate } from "../types";
 import mammoth from "mammoth";
 
-const _GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+const _GEMINI_API_KEY = import.meta.env.GEMINI_API_KEY;
 const GEMINI_API_KEY = typeof _GEMINI_API_KEY === 'string' ? _GEMINI_API_KEY : undefined;
 if (!GEMINI_API_KEY) {
   console.error("VITE_GEMINI_API_KEY is not set. Set it in your .env.local and restart the dev server.");

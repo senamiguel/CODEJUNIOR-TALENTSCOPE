@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, Auth } from "firebase/auth";
 import { getFirestore, Firestore } from "firebase/firestore";
-const apiKey = import.meta.env.VITE_FIREBASE_API_KEY as string | undefined;
+const apiKey = import.meta.env.FIREBASE_API_KEY as string | undefined;
 const authDomain = import.meta.env.VITE_FIREBASE_AUTH_DOMAIN as string | undefined;
 const projectId = import.meta.env.VITE_FIREBASE_PROJECT_ID as string | undefined;
 const storageBucket = import.meta.env.VITE_FIREBASE_STORAGE_BUCKET as string | undefined;
