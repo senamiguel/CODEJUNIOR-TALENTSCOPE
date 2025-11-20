@@ -134,7 +134,7 @@ export const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B0211] flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-[#0B0E14] flex items-center justify-center p-4 relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-brand-accent/5 rounded-full blur-3xl pointer-events-none"></div>
       <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-brand-purple/5 rounded-full blur-3xl pointer-events-none"></div>
@@ -143,8 +143,8 @@ export const Login = () => {
         <div className="flex flex-col items-center mb-8">
           {/* Code Logo CSS Recreation */}
           <div className="mb-6 font-black tracking-tighter text-5xl flex items-center gap-2 select-none transform hover:scale-105 transition-transform duration-300">
-            <span className="text-brand-purple" style={{ textShadow: '0 0 24px rgba(255,45,156,0.28)' }}>CODE</span>
-            <span className="text-brand-accent" style={{ textShadow: '0 0 24px rgba(0,255,106,0.28)' }}>[ ]</span>
+            <span className="text-brand-purple" style={{ textShadow: '0 0 20px rgba(139, 92, 246, 0.5)' }}>CODE</span>
+            <span className="text-brand-accent" style={{ textShadow: '0 0 20px rgba(0, 220, 130, 0.5)' }}>[ ]</span>
           </div>
 
           <h1 className="text-xl font-bold text-white tracking-tight text-center">TalentScout</h1>
